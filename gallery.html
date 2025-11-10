@@ -1,56 +1,80 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Galerie interactive</title>
-    <style>
-        #image {
-            width: 400px;
-            height: 300px;
-            border: 2px solid #000;
-            text-align: center;
-            line-height: 300px;
-            background-size: cover;
-            background-position: center;
-            margin-bottom: 20px;
-            font-family: Arial, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <title>Accessible Interactive Gallery</title>
+  <style>
+    #image {
+      width: 400px;
+      height: 300px;
+      border: 2px solid #000;
+      text-align: center;
+      line-height: 300px;
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 20px;
+      font-family: Arial, sans-serif;
+      transition: background-image 0.3s ease-in-out;
+    }
 
-        img {
-            width: 100px;
-            height: 75px;
-            margin: 5px;
-            cursor: pointer;
-        }
-    </style>
+    img {
+      width: 100px;
+      height: 75px;
+      margin: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body>
+<body onload="initializeGallery()">
 
-<div id="image">Hover over an image below to display here.</div>
+  <h1>My Accessible Photo Gallery</h1>
+  <div id="image">Hover or focus over an image below to display here.</div>
 
-<!-- Only one main div for the preview -->
-<div>
-    <img src="plage.jpg" alt="Plage" onmouseover="upDate(this)" onmouseout="undo()">
-    <img src="montagne.jpg" alt="Montagne" onmouseover="upDate(this)" onmouseout="undo()">
-    <img src="foret.jpg" alt="Forêt" onmouseover="upDate(this)" onmouseout="undo()">
-</div>
+  <div id="gallery">
+    <img src="plage.jpg" alt="Sunny beach at sunset">
+    <img src="montagne.jpg" alt="Snowy mountain peak">
+    <img src="foret.jpg" alt="Dense green forest">
+    <img src="ville.jpg" alt="City skyline at night">
+    <img src="desert.jpg" alt="Golden sand dunes in desert">
+    <img src="cascade.jpg" alt="Waterfall in tropical jungle">
+  </div>
 
-<script>
-function upDate(previewPic) {
+  <script>
+  // --- Functions to update and reset the main image ---
+  function upDate(previewPic) {
     const imageDiv = document.getElementById('image');
     imageDiv.innerHTML = previewPic.alt;
-    imageDiv.style.backgroundImage = "url('" + previewPic.src + "')";
-}
+    imageDiv.style.backgroundImage = `url('${previewPic.src}')`;
+  }
 
-function undo() {
+  function undo() {
     const imageDiv = document.getElementById('image');
-    imageDiv.innerHTML = "Hover over an image below to display here.";
+    imageDiv.innerHTML = "Hover or focus over an image below to display here.";
     imageDiv.style.backgroundImage = "url('')";
-}
-</script>
+  }
 
+  // --- Function called when page loads ---
+  function initializeGallery() {
+    console.log("Page loaded. Adding tabindex attributes...");
+    const images = document.querySelectorAll('#gallery img');
+
+    // Add tabindex and event listeners for accessibility
+    for (let i = 0; i < images.length; i++) {
+      images[i].setAttribute('tabindex', '0');
+
+      // Mouse events
+      images[i].addEventListener('mouseover', function() { upDate(this); });
+      images[i].addEventListener('mouseleave', function() { undo(); });
+
+      // Keyboard focus events
+      images[i].addEventListener('focus', function() { upDate(this); });
+      images[i].addEventListener('blur', function() { undo(); });
+    }
+  }
+  </script>
 </body>
 </html>
+
 
 
 
